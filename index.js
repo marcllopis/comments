@@ -3,7 +3,7 @@ let landingSection = document.getElementById("landing");
 let mainSection = document.getElementById("main-page");
 
 // button to control how to get to the comments section
-enterButton.addEventListener("click", function () {
+enterButton.addEventListener("click", () => {
   landingSection.classList.add("hide");
   mainSection.classList.remove("hide");
   mainSection.classList.add("show");
@@ -15,11 +15,7 @@ let input = document.getElementById("user");
 let text = document.getElementById("text");
 let commentsSection = document.getElementById("comments");
 
-// control the click on the comment button
-button.addEventListener("click", function () {
-  let inputValue = input.value;
-  let textValue = text.value;
-
+function generateHtmlComment(userNameFromHtml, userCommentFromHtml) {
   // create all html needed for a comment
   let commentContainer = document.createElement("div");
   let spaceBetweenLines = document.createElement("br");
@@ -28,8 +24,8 @@ button.addEventListener("click", function () {
   let separator = document.createElement("hr");
 
   // Mix the user name and comment with the created html elements
-  userNameElement.innerHTML = `${inputValue} said:`;
-  userCommentElement.innerHTML = textValue;
+  userNameElement.innerHTML = `${userNameFromHtml} said:`;
+  userCommentElement.innerHTML = userCommentFromHtml;
 
   // add all those elements to the div container
   commentContainer.appendChild(spaceBetweenLines);
@@ -39,7 +35,14 @@ button.addEventListener("click", function () {
 
   // add the comment div (with all its childs) to the html
   commentsSection.appendChild(commentContainer);
+}
 
+// control the click on the comment button
+button.addEventListener("click", () => {
+  let inputValue = input.value;
+  let textValue = text.value;
+  // calls the generate html fn with the needed params
+  generateHtmlComment(inputValue, textValue);
   // clear input and textarea fields
   input.value = "";
   text.value = "";
@@ -60,27 +63,7 @@ let listOfComments = [
   },
 ];
 
-for (let i = 0; i < listOfComments.length; i++) {
-  let user = listOfComments[i].user;
-  let comment = listOfComments[i].comment;
-
-  // create all html needed for a comment
-  let commentContainer = document.createElement("div");
-  let spaceBetweenLines = document.createElement("br");
-  let userNameElement = document.createElement("h4");
-  let userCommentElement = document.createElement("p");
-  let separator = document.createElement("hr");
-
-  // Mix the user name and comment with the created html elements
-  userNameElement.innerHTML = `${user} said:`;
-  userCommentElement.innerHTML = comment;
-
-  // add all those elements to the div container
-  commentContainer.appendChild(spaceBetweenLines);
-  commentContainer.appendChild(userNameElement);
-  commentContainer.appendChild(userCommentElement);
-  commentContainer.appendChild(separator);
-
-  // add the comment div (with all its childs) to the html
-  commentsSection.appendChild(commentContainer);
-}
+// iterates over the array of comments and calls the generatehtml fn on each element
+listOfComments.forEach((element) =>
+  generateHtmlComment(element.user, element.comment)
+);
